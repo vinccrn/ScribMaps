@@ -35,7 +35,9 @@
             }
             .maps {
                 background-color: rgb(210, 209, 209);
-                height: 100%;
+                width: 600px;
+                height: 800px;
+                
             }
         </style>
     </head>
@@ -43,8 +45,38 @@
     <body>
         <div class="row">
             <div class="col-lg-6">
-                <div class="maps">
-                    <h1>MAP</h1>
+                <div class="maps" id="map">
+                    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+                    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+                    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+                    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+                    <script>
+                            // Initialize communication with the platform
+                        const platform = new H.service.Platform({
+                            apikey: 'g5pnTzNpvTx0Uo_tTMCY9PW8mLsMpfMpotYavOUeuHA'
+                        });
+
+                        // Default options for the base layers that are used to render a map
+                        var defaultLayers = platform.createDefaultLayers();
+                        
+                        // Initialize the map
+                        var map = new H.Map(document.getElementById('map'), 
+                            defaultLayers.vector.normal.map, {
+                                zoom: 12,
+                                center: { lat: 48.13641, lng: 11.57754 } // Coordinates for Munich, Germany
+                            }
+                        );
+
+                        // add a resize listener to make sure that the map occupies the whole container
+                       window.addEventListener('resize', () => map.getViewPort().resize());
+
+                        // MapEvents enables the event system
+                        // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+                        var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+                        // Create the default UI components
+                        var ui = H.ui.UI.createDefault(map, defaultLayers);
+                    </script>
                 </div>
             </div>
             <div class="col-lg-6">
