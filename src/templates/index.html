@@ -50,11 +50,15 @@
                     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
                     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
                     <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
-                    <script>
-                            // Initialize communication with the platform
+                    <script>     
+                        var lat = "{{lat}}"
+                        var lng = "{{lng}}"
+
+                        // Initialize communication with the platform
                         const platform = new H.service.Platform({
                             apikey: 'g5pnTzNpvTx0Uo_tTMCY9PW8mLsMpfMpotYavOUeuHA'
                         });
+                        
 
                         // Default options for the base layers that are used to render a map
                         var defaultLayers = platform.createDefaultLayers();
@@ -63,7 +67,7 @@
                         var map = new H.Map(document.getElementById('map'), 
                             defaultLayers.vector.normal.map, {
                                 zoom: 12,
-                                center: { lat: 48.13641, lng: 11.57754 } // Coordinates for Munich, Germany
+                                center: { lat: lat, lng: lng } // Coordinates for Munich, Germany
                             }
                         );
 
@@ -83,6 +87,7 @@
                 <h2>ScribMaps</h2>
                 <div class="write-zone">
                     <p>Draw letters here to find an address</p>
+                    <p>{{data}}</p>
                 </div>
             </div>
         </div>
