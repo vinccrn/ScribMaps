@@ -69,6 +69,15 @@ history = model.fit(
     batch_size=64
 )
 
+y_pred = model.predict(test_x)
+y_pred
+
+from sklearn.metrics import accuracy_score
+
+y_pred_labels = np.argmax(y_pred, axis=1)
+accuracy = accuracy_score(test_y, y_pred_labels)
+print("Accuracy: %.2f%%" % (accuracy * 100))
+
 ascii_map = []
 for i in map_images.values:
     ascii_map.append(i[0].split()[1])
