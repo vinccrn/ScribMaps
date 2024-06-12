@@ -119,7 +119,7 @@
                 <h2>ScribMaps</h2>
                 <div class="form">
                     <form>
-                        <input type="address" placeholder="Westendstrasse 193, 80686 München, Deutschland">
+                        <input type="address" placeholder="Westendstrasse 193, 80686 München, Deutschland" id="recognizedText">
                         <input type="address" placeholder="Pariser Platz 3, 10117 Berlin, Deutschland">
                         <button type="submit">Démarrer</button>
                     </form>
@@ -128,6 +128,8 @@
                     <canvas id="canvas" width="480" height="400"></canvas>
                     <p>Draw letters here to find an address</p>
                 </div>
+                <div id="result">Result will appear here</div>
+                <div id="confidence">Confidence will appear here</div>
 
                 <script src="{{ url_for('static', filename='js/init.js') }}"></script>
                 <script src="{{ url_for('static', filename='js/tensorflow.js') }}"></script>
