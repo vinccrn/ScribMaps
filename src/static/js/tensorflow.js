@@ -1,6 +1,7 @@
 characters = ['0','1','2','3','4','5','6','7','8','9',
-'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
+'O','P','Q','R','S','T','U','V','W','X','Y','Z',
+'a','b','d','e','f','g','h','n','q','r','t']
 
 
 const modelUrl = "https://raw.githubusercontent.com/vinccrn/ScribMaps/main/src/static/model.json";
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 let tensor = preprocessCanvas(document.getElementById('canvas')); 
                 console.log(tensor);   
                 let predictions = await model.predict(tensor).data();
+                console.log(predictions);
                 let results = Array.from(predictions);       
                 console.log(results);
                 predictShow(results);
@@ -51,12 +53,41 @@ function clearCanvas(canvas) {
 }
 
 function preprocessCanvas(image) { 
-    let tensor = tf.browser.fromPixels(image)
-        .resizeNearestNeighbor([28, 28])
-        .mean(2)
-        .expandDims(2)
-        .expandDims()
-        .toFloat(); 
+    const ctx = image.getContext('2d');
+    const width = image.width;
+    const height = image.height;
+
+    // Get the image data
+    let imageData = ctx.getImageData(0, 0, width, height);
+    let data = imageData.data;
+
+    // Create a temporary canvas to resize the image
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCanvas.width = 28;
+    tempCanvas.height = 28;
+
+    // Draw the current image onto the temporary canvas
+    tempCtx.drawImage(image, 0, 0, 28, 28);
+
+    // Get the image data from the temporary canvas
+    imageData = tempCtx.getImageData(0, 0, 28, 28);
+    data = imageData.data;
+
+    // Create a 1D array of grayscale values
+    let grayData = [];
+    for (let i = 0; i < data.length; i += 4) {
+        let r = data[i];
+        let g = data[i + 1];
+        let b = data[i + 2];
+        let alpha = data[i + 3];
+        // Convert to grayscale
+        let gray = (0.299 * r + 0.587 * g + 0.114 * b) * (alpha / 255);
+        grayData.push(gray);
+    }
+
+    // Create a 2D tensor from the grayscale values and reshape it to 28x28x1
+    let tensor = tf.tensor4d(grayData, [1, 28, 28, 1]);
     return tensor.div(255.0);
 }
 
