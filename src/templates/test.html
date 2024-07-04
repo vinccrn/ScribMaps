@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page de test</title>
+</head>
+<body>
+    <h1>Training</h1>
+    <!-- Upload du fichier -->
+    <form method="POST" enctype="multipart/form-data" action="/api/scribmaps/upload/">
+        <input type="file" name="myfile">
+        <input type="submit" value="Upload">
+    </form>
+    <!-- Lancement de l'entrainement -->
+    <form method="POST" action="/api/scribmaps/start_training/">
+        <input type="submit" value="Lancer l'entraînement">
+    </form>
+
+    <h1>Predict</h1>
+    <!-- Predict -->
+    <form method="POST" action="/api/scribmaps/predict/">
+        <input type="text" name="saisie">
+        <input type="submit" value="Lancer l'entraînement">
+    </form>
+
+</body>
+</html>
