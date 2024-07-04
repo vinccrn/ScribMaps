@@ -98,8 +98,6 @@ def predict_address():
 
     saisie = data['saisie']
     
-    seuil_similarite = data.get('seuil_similarite', 0.90)
-
     try:
         adresse_predite = function.predire_adresse(saisie, token, seuil_similarite)
 
