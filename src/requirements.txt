@@ -93,3 +93,5 @@ Werkzeug==3.0.3
 wheel==0.43.0
 word2vec==0.11.1
 wrapt==1.16.0
+nltk
+openai

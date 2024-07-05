@@ -7,6 +7,17 @@ from gensim.models import Word2Vec
 from scipy.spatial.distance import cosine
 import subprocess
 import sys
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from openai import OpenAI
+
+nltk.download('stopwords')
+nltk.download('punkt')
+
+openai_client = OpenAI(api_key="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")
+
+stop_words = set(stopwords.words('french'))
 
 
 def install_spacy_model():
@@ -85,3 +96,28 @@ def predire_adresse(saisie, adresses, seuil_similarite=0.90):
                 print(meilleure_similarite)
 
     return meilleure_adresse
+
+def nlp_tokenization(document: str):
+    tokens = word_tokenize(document)
+    return [token for token in tokens if token.lower() not in stop_words]
+
+def question_with_gpt3(text: str, adresse_predite: str):
+    try:
+        prompt = (
+            "Vous êtes un assistant spécialisé dans l'analyse d'adresses. "
+            f"L'utilisateur a saisi : \"{text}\". "
+            f"L'adresse prédite est : \"{adresse_predite}\". "
+            "Veuillez fournir des informations pertinentes sur cette adresse ou des recommandations utiles. "
+            "Si l'adresse prédite est vide ou non pertinente, donnez des conseils généraux sur la recherche d'adresses."
+        )
+        response = openai_client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": f"Analyse de l'adresse : {adresse_predite}"}
+            ]
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print(f"Erreur lors de l'appel à GPT-3: {str(e)}")
+        return "Erreur système lors de l'analyse de l'adresse."

@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, current_app, render_template, jsonify, request
 from gensim.models import Word2Vec
 import os
 from werkzeug.utils import secure_filename
@@ -109,3 +109,34 @@ def predict_address():
 
     except Exception as e:
         return jsonify({"error": f"Erreur lors de la prédiction : {str(e)}"}), 500
+    
+@app.route("/api/scribmaps/model", methods=['GET'])
+def process_text():
+    text = request.args.get('text')
+    if not text:
+        return jsonify({"error": "Le paramètre 'text' est manquant"}), 400
+
+    try:
+        tokens = function.nlp_tokenization(text)
+
+        # Récupération d'adresse_predite dans predict_address()
+        with current_app.test_client() as client:
+            payload = {"saisie": text}
+            response = client.post("/api/scribmaps/predict", json=payload)
+            prediction_result = response.get_json()
+
+        if response.status_code == 200 and "adresse_predite" in prediction_result:
+            adresse_predite = prediction_result["adresse_predite"]
+        else:
+            adresse_predite = "Aucune adresse correspondante trouvée"
+
+        gpt_analysis = function.question_with_gpt3(text, adresse_predite)
+
+        response = {
+            "tokens": tokens,
+            "adresse_predite": adresse_predite,
+            "analyse_gpt": gpt_analysis
+        }
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({"error": f"Erreur lors du traitement : {str(e)}"}), 500
