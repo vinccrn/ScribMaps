@@ -45,6 +45,7 @@ mediapipe==0.10.14
 ml-dtypes==0.3.2
 murmurhash==1.0.10
 namex==0.0.8
+nltk==3.8.1
 numpy==1.26.4
 opencv-contrib-python==4.9.0.80
 opencv-python==4.9.0.80
@@ -62,6 +63,7 @@ Pygments==2.18.0
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 pytz==2024.1
+regex==2024.5.15
 requests==2.31.0
 rich==13.7.1
 scikit-learn==1.4.2
@@ -93,5 +95,3 @@ Werkzeug==3.0.3
 wheel==0.43.0
 word2vec==0.11.1
 wrapt==1.16.0
-nltk
-openai
