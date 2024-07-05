@@ -17,10 +17,27 @@
 
     <h1>Predict</h1>
     <!-- Predict -->
-    <form method="POST" action="/api/scribmaps/predict">
-        <input type="text" name="saisie">
-        <input type="submit" value="Predict">
+    <form id="predictForm">
+        <input type="text" id="saisie" name="saisie">
+        <input type="button" value="Predict" onclick="predict()">
     </form>
-
+    
+    <script>
+        function predict() {
+            let saisie = document.getElementById('saisie').value;
+            fetch('/api/scribmaps/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({saisie: saisie})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = JSON.stringify(data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>
