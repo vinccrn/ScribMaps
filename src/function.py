@@ -29,9 +29,11 @@ def install_spacy_model():
 
 def tokenisation(file):
     print("Vérification du Spacy Model pour la tokenisation NLP")
+    print("-------------------------------")
     install_spacy_model()
     print("lancement de la tokenisation...")
     print("-------------------------------")
+    print("Ladies and gentlemen, nous sommes sur le point d'atterir. Veuillez patienter environ 10 Minutes pour que le traitement NLP se termine")
 
     df = pd.read_csv(file, delimiter=";")
     df_france = df.drop(['id', 'id_fantoir', 'code_insee', 'code_insee_ancienne_commune', 'nom_ancienne_commune', 'x', 'y', 'lat', 'lon', 'type_position', 'alias', 'nom_ld', 'libelle_acheminement',  'nom_afnor', 'source_position', 'source_nom_voie', 'certification_commune', 'cad_parcelles'], axis=1)
