@@ -19,6 +19,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 files = os.listdir(UPLOAD_FOLDER)
 
 latest_file = max([os.path.join(UPLOAD_FOLDER, f) for f in files], key=os.path.getctime)
+print("Pour accéder au serveur sur le port 5000, veuillez patienter la fin de la tokenisation 10 mins environ")
 token = function.tokenisation(latest_file)
 
 # App
@@ -99,7 +100,7 @@ def predict_address():
     saisie = data['saisie']
     
     try:
-        adresse_predite = function.predire_adresse(saisie, token, seuil_similarite)
+        adresse_predite = function.predire_adresse(saisie, token, 0.90)
 
         if adresse_predite:
             return jsonify({"adresse_predite": adresse_predite}), 200

@@ -5,10 +5,23 @@ import gensim
 import spacy
 from gensim.models import Word2Vec
 from scipy.spatial.distance import cosine
+import subprocess
+import sys
+
+
+def install_spacy_model():
+    try:
+        subprocess.check_call([sys.executable, "-m", "spacy", "download", "fr_core_news_sm"])
+        print("Le modèle fr_core_news_sm a été installé avec succès.")
+    except subprocess.CalledProcessError:
+        print("Une erreur s'est produite lors de l'installation du modèle.")
 
 def tokenisation(file):
-    print("On lance la tokenisation")
-    print(file)
+    print("Vérification du Spacy Model pour la tokenisation NLP")
+    install_spacy_model()
+    print("lancement de la tokenisation...")
+    print("-------------------------------")
+
     df = pd.read_csv(file, delimiter=";")
     df_france = df.drop(['id', 'id_fantoir', 'code_insee', 'code_insee_ancienne_commune', 'nom_ancienne_commune', 'x', 'y', 'lat', 'lon', 'type_position', 'alias', 'nom_ld', 'libelle_acheminement',  'nom_afnor', 'source_position', 'source_nom_voie', 'certification_commune', 'cad_parcelles'], axis=1)
     df_france = df_france.assign(pays="France")
@@ -38,6 +51,8 @@ def tokenisation(file):
             #mots = [token.text for token in tokens]
             mots = [token.text for token in tokens if token.text != '\t']
             tokenized_data.append(mots)
+    print("fin de la tokenisation...")
+    print("-------------------------------")
     return tokenized_data
 
 def entrainement_modele(file):
